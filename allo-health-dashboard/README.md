@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Allo Health Clinic Queue Management System
+
+A modern web application for managing patient queues and appointments at Allo Health Clinic. Built with Next.js, TypeScript, and Tailwind CSS.
+
+## Features
+
+- **Queue Management**
+  - Add patients to queue with priority levels
+  - Update patient status (Waiting, With Doctor, Completed)
+  - Set priority levels (Normal, Urgent)
+  - Remove patients from queue
+  - Real-time queue updates
+
+- **Appointment Management** 
+  - Schedule patient appointments
+  - View upcoming appointments
+  - Manage appointment status
+
+- **Authentication**
+  - Secure staff login system
+  - Protected routes
+  - Role-based access control
+
+- **User Interface**
+  - Clean, modern UI with Tailwind CSS
+  - Responsive design for all devices
+  - Dark/Light theme support
+  - Toast notifications
+  - Loading states and error handling
+
+## Tech Stack
+
+- Next.js 13 (App Router)
+- TypeScript
+- Tailwind CSS
+- Radix UI Components
+- Shadcn UI
+- NextAuth.js
+- React Context API
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/nandishns/allo-health-clinic.git
+   cd allo-health-clinic
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env.local
+   ```
+   Then edit `.env.local` with your configuration
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
