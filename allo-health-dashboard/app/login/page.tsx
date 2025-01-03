@@ -10,12 +10,14 @@ import { useToast } from "@/hooks/use-toast"
 import { PasswordInput } from '@/components/PasswordInput'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 export default function LoginPage() {
   const [staffId, setStaffId] = useState('')
   const [password, setPassword] = useState('')
   const { login } = useAuth()
   const { toast } = useToast()
+  const [showCredentials, setShowCredentials] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -71,7 +73,32 @@ export default function LoginPage() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col">
-          <Button className="w-full bg-black text-white hover:bg-gray-800" onClick={handleSubmit}>Sign In</Button>
+          <Button className="w-full bg-black text-white hover:bg-gray-800" onClick={handleSubmit}>
+            Sign In
+          </Button>
+          <Dialog open={showCredentials} onOpenChange={setShowCredentials}>
+            <DialogTrigger asChild>
+              <Button variant="link" className="mt-2 text-sm text-gray-600 hover:text-gray-800">
+                Get test credentials
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Test Credentials</DialogTitle>
+                <DialogDescription>Use these credentials to test the application:</DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="flex items-center gap-4">
+                  <Label className="text-right">Staff ID:</Label>
+                  <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">12345</code>
+                </div>
+                <div className="flex items-center gap-4">
+                  <Label className="text-right">Password:</Label>
+                  <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">pes@pes</code>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
           <p className="mt-2 text-sm text-center text-gray-600">
             Don't have an account?{" "}
             <Link href="/register" className="text-blue-600 hover:underline">
