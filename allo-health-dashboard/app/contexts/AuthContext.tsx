@@ -19,23 +19,6 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-// Create an axios instance with base configuration
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  headers: {
-
-  },
-})
-
-// Add axios interceptor to add token to requests
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
-  return config
-})
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
@@ -50,7 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (token && userData) {
         try {
           // Set default authorization header for all future requests
-          api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
           setUser(JSON.parse(userData))
         } catch (error) {
           console.error('Token verification failed:', error)
@@ -77,7 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (staffId: string, password: string) => {
     try {
-      const response = await api.post('/auth/login', {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         staffId,
         password,
       })
@@ -96,7 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (staffId: string, password: string) => {
     try {
-      const response = await api.post('/auth/register', {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
         staffId,
         password,
       })
