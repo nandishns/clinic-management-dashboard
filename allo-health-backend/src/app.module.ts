@@ -32,7 +32,8 @@ import { AppointmentModule } from './appointment/appointment.module';
         logging: true,
         ssl: {
           rejectUnauthorized: false,
-          ca: configService.get('CA_CERT') || fs.readFileSync(path.join(process.cwd(), 'ca.pem'))
+          // ca: configService.get('CA_CERT') || fs.readFileSync(path.join(process.cwd(), 'ca.pem'))
+          ca: configService.get('CA_CERT')
         }
       }),
       inject: [ConfigService],
