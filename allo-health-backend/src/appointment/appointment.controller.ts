@@ -3,6 +3,9 @@ import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AppointmentStatus } from 'database/entities/appointment.entity';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from 'database/entities/user.entity';
 
 @Controller('appointments')
 @UseGuards(JwtAuthGuard)
@@ -34,5 +37,28 @@ export class AppointmentController {
   @Delete('cancel')
   async cancelAppointment(@Param('id', ParseIntPipe) id: number) {
     return this.appointmentService.cancelAppointment(id);
+  }
+
+  @Get('admin/all')
+
+  @Roles(Role.ADMIN)
+  async getAllAppointments() {
+    return this.appointmentService.getAllAppointments();
+  }
+
+  @Get('admin/doctor/:doctorId')
+  @Roles(Role.ADMIN)
+  async getAppointmentsByDoctor(
+    @Param('doctorId', ParseIntPipe) doctorId: number
+  ) {
+    return this.appointmentService.getAppointmentsByDoctor(doctorId);
+  }
+
+  @Get('admin/patient/:patientId')
+  @Roles(Role.ADMIN)
+  async getAppointmentsByPatient(
+    @Param('patientId', ParseIntPipe) patientId: number
+  ) {
+    return this.appointmentService.getAppointmentsByPatient(patientId);
   }
 } 

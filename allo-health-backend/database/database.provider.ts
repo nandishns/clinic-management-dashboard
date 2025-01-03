@@ -12,12 +12,6 @@ import * as path from 'path';
 
 const logger = new Logger('DatabaseProvider');
 
-// Immediate logging to check if this code runs
-console.log('Database Provider is being loaded');
-logger.log('Database Provider initialization started');
-
-console.log('=== Database Provider File Loaded ===');
-
 export const databaseProviders = [
   {
     provide: 'DATA_SOURCE',

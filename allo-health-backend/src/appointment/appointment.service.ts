@@ -137,4 +137,36 @@ export class AppointmentService {
     appointment.status = AppointmentStatus.CANCELLED;
     return this.appointmentRepository.save(appointment);
   }
+
+  async getAllAppointments() {
+    return this.appointmentRepository.find({
+      relations: ['doctor', 'patient'],
+      order: {
+        appointmentDate: 'DESC',
+        time: 'ASC'
+      }
+    });
+  }
+
+  async getAppointmentsByDoctor(doctorId: number) {
+    return this.appointmentRepository.find({
+      where: { doctor: { id: doctorId } },
+      relations: ['doctor', 'patient'],
+      order: {
+        appointmentDate: 'DESC',
+        time: 'ASC'
+      }
+    });
+  }
+
+  async getAppointmentsByPatient(patientId: number) {
+    return this.appointmentRepository.find({
+      where: { patient: { id: patientId } },
+      relations: ['doctor', 'patient'],
+      order: {
+        appointmentDate: 'DESC',
+        time: 'ASC'
+      }
+    });
+  }
 } 

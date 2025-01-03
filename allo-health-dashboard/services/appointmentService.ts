@@ -87,5 +87,38 @@ export const appointmentService = {
       }
     );
     return response.data;
+  },
+
+  async getAllAppointments() {
+    const token = localStorage.getItem('accessToken');
+    const response = await axios.get<Appointment[]>(
+      `${API_URL}/appointments/admin/all`,
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    );
+    return response.data;
+  },
+
+  async getAppointmentsByDoctor(doctorId: number) {
+    const token = localStorage.getItem('accessToken');
+    const response = await axios.get<Appointment[]>(
+      `${API_URL}/appointments/admin/doctor/${doctorId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    );
+    return response.data;
+  },
+
+  async getAppointmentsByPatient(patientId: number) {
+    const token = localStorage.getItem('accessToken');
+    const response = await axios.get<Appointment[]>(
+      `${API_URL}/appointments/admin/patient/${patientId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    );
+    return response.data;
   }
-}; 
+};

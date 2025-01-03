@@ -1,5 +1,5 @@
-import { IsString, IsNotEmpty } from 'class-validator';
-
+import { IsString, IsNotEmpty, IsEnum } from 'class-validator';
+import { Role } from 'database/entities/user.entity';
 export class RegisterDto {
   @IsString()
   @IsNotEmpty()
@@ -8,4 +8,8 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   password: string;
+
+  @IsEnum(Role)
+  @IsNotEmpty()
+  role: Role = Role.STAFF;
 } 

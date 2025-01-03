@@ -3,11 +3,15 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
-
+export enum Role {
+  STAFF = 'STAFF',
+  ADMIN = 'ADMIN'
+}
 type User = {
   staffId: string
   name: string
   accessToken: string
+  role: Role
 }
 
 type AuthContextType = {
@@ -64,9 +68,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         staffId,
         password,
       })
-
       const { access_token, user: userData } = response.data
-      const user = { staffId, ...userData }
+      const user = { staffId, ...userData, role: userData.role as Role }
       setUser(user)
       localStorage.setItem('accessToken', access_token)
       localStorage.setItem('user', JSON.stringify(user))

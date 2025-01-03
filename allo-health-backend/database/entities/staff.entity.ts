@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn } from "typeorm";
 
 import { Column } from "typeorm";
+import { Role } from "./user.entity";
+
 
 @Entity()
 export class Staff {
@@ -15,6 +17,7 @@ export class Staff {
 
   @Column()
   email: string;
+
 
   @Column({ default: false })
   isRegistered: boolean;

@@ -67,7 +67,6 @@ export default function QueueManagement() {
 
   const handleStatusChange = async (patientId: number, newStatus: Patient["status"]) => {
     try {
-      console.log(newStatus)
       await queueService.updateQueue(patientId, { status: newStatus});
       queryClient.invalidateQueries({ queryKey: ['queue'] })
       toast({

@@ -3,6 +3,9 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RolesGuard } from './guards/roles.guard';
+import { Roles } from './decorators/roles.decorator';
+import { Role } from 'database/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -23,5 +26,12 @@ export class AuthController {
   async verifyToken(@Request() req) {
     const token = req.headers.authorization?.split(' ')[1];
     return this.authService.verifyToken(token);
+  }
+
+  @Post('register/admin')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles(Role.ADMIN)
+  async registerAdmin(@Body() registerDto: RegisterDto) {
+    return this.authService.registerAdmin(registerDto);
   }
 }

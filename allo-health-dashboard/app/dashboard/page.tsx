@@ -4,17 +4,20 @@ import { useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import QueueManagement from "@/components/QueueManagement"
 import AppointmentManagement from "@/components/AppointmentManagement"
+import AdminDashboard from "@/components/AdminDashboard"
 import { MoonIcon, SunIcon } from 'lucide-react'
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import ProtectedRoute from "@/components/ProtectedRoute"
-import { useAuth } from '../contexts/AuthContext'
+import { Role, useAuth } from '../contexts/AuthContext'
 import Image from 'next/image'
+
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("queue")
   const { setTheme, theme } = useTheme()
   const { user, logout } = useAuth()
+  const isAdmin = user?.role === Role.ADMIN
 
   return (
     <ProtectedRoute>
@@ -73,6 +76,14 @@ export default function Dashboard() {
               >
                 Appointment Management
               </TabsTrigger>
+              {isAdmin && (
+                <TabsTrigger 
+                  value="admin" 
+                  className="w-full sm:w-auto px-4 py-2 text-sm sm:text-base data-[state=active]:shadow-none"
+                >
+                  Admin Overview
+                </TabsTrigger>
+              )}
             </TabsList>
             <TabsContent value="queue" className="space-y-4 mt-2">
               <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -84,6 +95,13 @@ export default function Dashboard() {
                 <AppointmentManagement />
               </div>
             </TabsContent>
+            {isAdmin && (
+              <TabsContent value="admin" className="space-y-4 mt-2">
+                <div className="bg-white rounded-lg shadow overflow-hidden">
+                  <AdminDashboard />
+                </div>
+              </TabsContent>
+            )}
           </Tabs>
         </main>
       </div>
