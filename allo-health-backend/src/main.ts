@@ -12,7 +12,7 @@ async function bootstrap() {
     });
     
     app.enableCors({
-      origin: true,
+      origin: ['https://clinic-management-dashboard.vercel.app', 'http://localhost:3000'],
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       credentials: true,
     });
