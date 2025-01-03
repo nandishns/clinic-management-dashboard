@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Queue } from './queue.entity';
 import { Appointment } from './appointment.entity';
+import { DoctorSchedule } from './doctor-schedule.entity';
 
 enum Gender {
   MALE = 'MALE',
@@ -24,12 +25,13 @@ export class Doctor {
   })
   gender: Gender;
 
-  @Column('json')
-  availability: any;
 
   @OneToMany(() => Queue, queue => queue.doctor)
   queues: Queue[];
 
   @OneToMany(() => Appointment, appointment => appointment.doctor)
   appointments: Appointment[];
+
+  @OneToMany(() => DoctorSchedule, schedule => schedule.doctor)
+  schedules: DoctorSchedule[];
 } 

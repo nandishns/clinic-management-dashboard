@@ -4,21 +4,18 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { format, addDays, parseISO } from 'date-fns'
 import { useToast } from "@/hooks/use-toast"
+import { Appointment } from "@/services/appointmentService"
 
 type CancelRescheduleDialogProps = {
   children: React.ReactNode
-  appointment: {
-    id: number
-    date: Date
-    time: string
-  }
+  appointment: Appointment
   onCancel: (appointmentId: number) => void
   onReschedule: (appointmentId: number, newDate: Date, newTime: string) => void
 }
 
 const timeSlots = [
-  "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
-  "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM"
+  "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+  "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"
 ]
 
 export default function CancelRescheduleDialog({ children, appointment, onCancel, onReschedule }: CancelRescheduleDialogProps) {
@@ -65,7 +62,7 @@ export default function CancelRescheduleDialog({ children, appointment, onCancel
         <DialogHeader>
           <DialogTitle>Manage Appointment</DialogTitle>
           <DialogDescription>
-            Cancel or reschedule your appointment on {format(appointment.date, 'MMMM d, yyyy')} at {appointment.time}
+            Cancel or reschedule your appointment on {format(appointment.appointmentDate, 'MMMM d, yyyy')} at {appointment.time}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

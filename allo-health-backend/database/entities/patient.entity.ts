@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Queue } from './queue.entity';
 import { Appointment } from './appointment.entity';
 
-enum Gender {
+export enum Gender {
   MALE = 'MALE',
   FEMALE = 'FEMALE'
 }
@@ -15,14 +15,19 @@ export class Patient {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   age: number;
 
+  
   @Column({
     type: 'enum',
-    enum: Gender
+    enum: Gender,
+    nullable: true
   })
   gender: Gender;
+
+  @Column({ nullable: true })
+  phone_number: string;
 
   @Column()
   created_at: Date;

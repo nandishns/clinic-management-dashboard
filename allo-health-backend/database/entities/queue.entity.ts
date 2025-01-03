@@ -1,11 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
 import { Patient } from './patient.entity';
 import { Doctor } from './doctor.entity';
 
-enum QueueStatus {
+export enum QueueStatus {
   WAITING = 'WAITING',
-  IN_PROGRESS = 'IN_PROGRESS',
+  WITH_DOCTOR = 'WITH DOCTOR',
   COMPLETED = 'COMPLETED'
+}
+
+export enum QueuePriority {
+  NORMAL = 'NORMAL',
+  URGENT = 'URGENT'
 }
 
 @Entity()
@@ -14,7 +19,7 @@ export class Queue {
   id: number;
 
   @Column()
-  queue_number: number;
+  queueNumber: number;
 
   @Column({
     type: 'enum',
@@ -23,9 +28,25 @@ export class Queue {
   })
   status: QueueStatus;
 
-  @ManyToOne(() => Patient, patient => patient.queues)
+  @Column({
+    type: 'enum',
+    enum: QueuePriority,
+    default: QueuePriority.NORMAL
+  })
+  priority: QueuePriority;
+
+  @CreateDateColumn()
+  arrived_at: Date;
+
+  @ManyToOne(() => Patient, patient => patient.queues, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
   patient: Patient;
 
-  @ManyToOne(() => Doctor, doctor => doctor.queues)
+  @ManyToOne(() => Doctor, doctor => doctor.queues, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
   doctor: Doctor;
 } 

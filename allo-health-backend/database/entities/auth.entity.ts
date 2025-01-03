@@ -12,6 +12,9 @@ export class Auth {
   @Column()
   username: string;
 
-  @OneToOne(() => Users, user => user.auth)
+  @OneToOne(() => Users, user => user.auth, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
   user: Users;
 } 

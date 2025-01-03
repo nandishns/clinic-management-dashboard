@@ -7,6 +7,9 @@ import configuration from '../config/configuration';
 import * as fs from 'fs';
 import * as path from 'path';
 import { LoggerMiddleware } from '../middleware/logger.middleware';
+import { QueueModule } from './queue/queue.module';
+import { DoctorModule } from './doctor/doctor.module';
+import { AppointmentModule } from './appointment/appointment.module';
 
 @Module({
   imports: [
@@ -36,6 +39,9 @@ import { LoggerMiddleware } from '../middleware/logger.middleware';
     }),
     AuthModule,
     UserModule,
+    QueueModule,
+    DoctorModule,
+    AppointmentModule,
   ],
 })
 export class AppModule implements NestModule {

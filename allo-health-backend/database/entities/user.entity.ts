@@ -30,7 +30,10 @@ export class Users {
   @Column()
   created_at: Date;
 
-  @OneToOne(() => Auth, auth => auth.user)
+  @OneToOne(() => Auth, auth => auth.user, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
   @JoinColumn({ name: 'profileID' })
   auth: Auth;
 

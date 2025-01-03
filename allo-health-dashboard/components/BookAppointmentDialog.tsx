@@ -6,12 +6,9 @@ import { Label } from "@/components/ui/label"
 import { format, parseISO } from 'date-fns'
 import { useToast } from "@/hooks/use-toast"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Doctor } from "@/services/doctorService"
 
-type Doctor = {
-  id: number
-  name: string
-  specialty: string
-}
+
 
 type BookAppointmentDialogProps = {
   children: React.ReactNode
@@ -109,7 +106,7 @@ export default function BookAppointmentDialog({ children, doctorId: initialDocto
                 <SelectContent>
                   {doctors.map((doctor) => (
                     <SelectItem key={doctor.id} value={doctor.id.toString()}>
-                      {doctor.name} - {doctor.specialty}
+                      {doctor.name} - {doctor.specialization}
                     </SelectItem>
                   ))}
                 </SelectContent>

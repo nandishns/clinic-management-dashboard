@@ -5,6 +5,7 @@ import { Patient } from './entities/patient.entity';
 import { Doctor } from './entities/doctor.entity';
 import { Queue } from './entities/queue.entity';
 import { Appointment } from './entities/appointment.entity';
+import { DoctorSchedule } from './entities/doctor-schedule.entity';
 import { Logger } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -31,7 +32,7 @@ export const databaseProviders = [
           username: process.env.DB_USERNAME || '',
           password: process.env.DB_PASSWORD || '',
           database: process.env.DB_DATABASE || '',
-          entities: [Auth, Users, Patient, Doctor, Queue, Appointment],
+          entities: [Auth, Users, Patient, Doctor, Queue, Appointment, DoctorSchedule],
           synchronize: process.env.NODE_ENV !== 'prod',
           logging: true,
           ssl: {
