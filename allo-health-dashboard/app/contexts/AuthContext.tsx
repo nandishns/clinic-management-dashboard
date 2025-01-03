@@ -60,6 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (staffId: string, password: string) => {
     try {
+      console.log(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`)
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         staffId,
         password,
