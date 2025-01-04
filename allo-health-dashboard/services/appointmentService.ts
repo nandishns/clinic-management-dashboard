@@ -70,7 +70,10 @@ export const appointmentService = {
     const token = localStorage.getItem('accessToken');
     const response = await axios.put<Appointment>(
       `${API_URL}/appointments/update/${id}`,
-      updates,
+      {
+        appointmentDate: updates.appointmentDate,
+        time: updates.time
+      },
       {
         headers: { Authorization: `Bearer ${token}` }
       }

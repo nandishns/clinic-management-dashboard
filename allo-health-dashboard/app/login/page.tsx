@@ -11,16 +11,82 @@ import { PasswordInput } from '@/components/PasswordInput'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Copy } from 'lucide-react'
+
+const TestCredentialsContent = () => {
+  const { toast } = useToast()
+
+  const copyToClipboard = (text: string, type: string) => {
+    navigator.clipboard.writeText(text)
+    toast({
+      title: "Copied!",
+      description: `${type} copied to clipboard`,
+      duration: 2000,
+    })
+  }
+
+  return (
+    <div className="grid gap-4 py-4">
+      <div className="space-y-6">
+        <div className="space-y-3">
+          <h3 className="font-medium text-lg">Staff Account</h3>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label>Staff ID:</Label>
+              <code className="relative rounded bg-muted px-3 py-1 font-mono text-sm">12345</code>
+            </div>
+            <div className="flex items-center justify-between">
+              <Label>Password:</Label>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="font-mono text-sm"
+                onClick={() => copyToClipboard("pes@pes", "Staff password")}
+              >
+                <span className="mr-2">••••••••</span>
+                <Copy className="h-3 w-3" />
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <h3 className="font-medium text-lg">Admin Account</h3>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label>Staff ID:</Label>
+              <code className="relative rounded bg-muted px-3 py-1 font-mono text-sm">67890</code>
+            </div>
+            <div className="flex items-center justify-between">
+              <Label>Password:</Label>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="font-mono text-sm"
+                onClick={() => copyToClipboard("admin@pes", "Admin password")}
+              >
+                <span className="mr-2">••••••••</span>
+                <Copy className="h-3 w-3" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function LoginPage() {
   const [staffId, setStaffId] = useState('')
   const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const { login } = useAuth()
   const { toast } = useToast()
   const [showCredentials, setShowCredentials] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsLoading(true)
     try {
       await login(staffId, password)
       toast({
@@ -33,6 +99,8 @@ export default function LoginPage() {
         description: "Invalid credentials. Please try again.",
         variant: "destructive",
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -73,8 +141,19 @@ export default function LoginPage() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col">
-          <Button className="w-full bg-black text-white hover:bg-gray-800" onClick={handleSubmit}>
-            Sign In
+          <Button 
+            className="w-full bg-black text-white hover:bg-gray-800" 
+            onClick={handleSubmit}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Signing in...
+              </div>
+            ) : (
+              "Sign In"
+            )}
           </Button>
           <Dialog open={showCredentials} onOpenChange={setShowCredentials}>
             <DialogTrigger asChild>
@@ -85,18 +164,11 @@ export default function LoginPage() {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Test Credentials</DialogTitle>
-                <DialogDescription>Use these credentials to test the application:</DialogDescription>
+                <DialogDescription>
+                  Use these credentials to test the application. Click on the password to copy.
+                </DialogDescription>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="flex items-center gap-4">
-                  <Label className="text-right">Staff ID:</Label>
-                  <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">12345</code>
-                </div>
-                <div className="flex items-center gap-4">
-                  <Label className="text-right">Password:</Label>
-                  <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">pes@pes</code>
-                </div>
-              </div>
+              <TestCredentialsContent />
             </DialogContent>
           </Dialog>
           <p className="mt-2 text-sm text-center text-gray-600">

@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { format, addDays, parseISO } from 'date-fns'
 import { useToast } from "@/hooks/use-toast"
 import { Appointment } from "@/services/appointmentService"
+import { useQueryClient } from "@tanstack/react-query"
 
 type CancelRescheduleDialogProps = {
   children: React.ReactNode
@@ -24,33 +25,39 @@ export default function CancelRescheduleDialog({ children, appointment, onCancel
   const [newTime, setNewTime] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
+  const queryClient = useQueryClient()
 
   const handleCancel = async () => {
     setIsSubmitting(true)
-    // Simulate an API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    onCancel(appointment.id)
-    setOpen(false)
+    try {
+      await onCancel(appointment.id)
+      queryClient.invalidateQueries({ queryKey: ['appointments'] })
+      setOpen(false)
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to cancel appointment",
+        variant: "destructive"
+      })
+    }
     setIsSubmitting(false)
-    toast({
-      title: "Appointment Cancelled",
-      description: "Your appointment has been successfully cancelled.",
-    })
   }
 
   const handleReschedule = async () => {
-    if (newDate && newTime) {
-      setIsSubmitting(true)
-      // Simulate an API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      onReschedule(appointment.id, parseISO(newDate), newTime)
+    if (!newDate || !newTime) return
+    setIsSubmitting(true)
+    try {
+      await onReschedule(appointment.id, parseISO(newDate), newTime)
+      queryClient.invalidateQueries({ queryKey: ['appointments'] })
       setOpen(false)
-      setIsSubmitting(false)
+    } catch (error) {
       toast({
-        title: "Appointment Rescheduled",
-        description: `Your appointment has been rescheduled to ${format(parseISO(newDate), 'MMMM d, yyyy')} at ${newTime}.`,
+        title: "Error",
+        description: "Failed to reschedule appointment",
+        variant: "destructive"
       })
     }
+    setIsSubmitting(false)
   }
 
   return (
@@ -67,15 +74,21 @@ export default function CancelRescheduleDialog({ children, appointment, onCancel
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Select onValueChange={setNewDate}>
-              <SelectTrigger className="col-span-4">
-                <SelectValue placeholder="Select new date" />
+            <Select value={newDate || ""} onValueChange={setNewDate}>
+              <SelectTrigger className="col-span-4 bg-white text-black border border-input">
+                <SelectValue placeholder="Select new date" className="text-black">
+                  {newDate ? format(parseISO(newDate), 'EEEE, MMM dd') : "Select new date"}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {[0, 1, 2, 3, 4, 5, 6].map((dayOffset) => {
                   const date = addDays(new Date(), dayOffset)
                   return (
-                    <SelectItem key={dayOffset} value={date.toISOString()}>
+                    <SelectItem 
+                      key={dayOffset} 
+                      value={date.toISOString()}
+                      className="text-black hover:bg-gray-100"
+                    >
                       {format(date, 'EEEE, MMM dd')}
                     </SelectItem>
                   )

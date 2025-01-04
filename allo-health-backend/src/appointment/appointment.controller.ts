@@ -26,15 +26,17 @@ export class AppointmentController {
     return this.appointmentService.getAppointments({ doctorId, patientId, status });
   }
 
-  @Put('update')
+  @Put('update/:id')
+  @UseGuards(JwtAuthGuard)
   async updateAppointment(
-    @Body() updates: Partial<CreateAppointmentDto>,
-    @Param('id', ParseIntPipe) id: number
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateAppointmentDto: Partial<CreateAppointmentDto>
   ) {
-    return this.appointmentService.updateAppointment(id, updates);
+    return this.appointmentService.updateAppointment(id, updateAppointmentDto);
   }
 
-  @Delete('cancel')
+  @Delete('cancel/:id')
+  @UseGuards(JwtAuthGuard)
   async cancelAppointment(@Param('id', ParseIntPipe) id: number) {
     return this.appointmentService.cancelAppointment(id);
   }

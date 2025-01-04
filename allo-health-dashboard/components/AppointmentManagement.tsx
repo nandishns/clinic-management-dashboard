@@ -31,7 +31,8 @@ export default function AppointmentManagement() {
 
   const { data: appointments = [], isLoading: isLoadingAppointments } = useQuery({
     queryKey: ['appointments'],
-    queryFn: () => appointmentService.getAppointments()
+    queryFn: () => appointmentService.getAppointments({ status: 'BOOKED' }),
+    select: (data) => data.filter(appointment => appointment.status === 'BOOKED')
   });
 
   const { data: apiDoctors = [], isLoading: isLoadingDoctors } = useQuery({
@@ -77,25 +78,42 @@ export default function AppointmentManagement() {
     }
   };
 
-  const handleCancelAppointment = (appointmentId: number) => {
-    appointmentService.cancelAppointment(appointmentId)
-    toast({
-      title: "Appointment Cancelled",
-      description: "The appointment has been cancelled successfully.",
-      variant: "destructive"
-    })
-  }
+  const handleCancelAppointment = async (appointmentId: number) => {
+    try {
+      await appointmentService.cancelAppointment(appointmentId);
+      await queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      toast({
+        title: "Appointment Cancelled",
+        description: "The appointment has been cancelled successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to cancel appointment",
+        variant: "destructive"
+      });
+    }
+  };
 
-  const handleRescheduleAppointment = (appointmentId: number, newDate: Date, newTime: string) => {
-    appointmentService.updateAppointment(appointmentId, {
-      appointmentDate: newDate.toISOString(),
-      time: newTime
-    })
-    toast({
-      title: "Appointment Rescheduled",
-      description: `Appointment rescheduled to ${format(newDate, 'MMM dd, yyyy')} at ${newTime}`,
-    })
-  }
+  const handleRescheduleAppointment = async (appointmentId: number, newDate: Date, newTime: string) => {
+    try {
+      await appointmentService.updateAppointment(appointmentId, {
+        appointmentDate: newDate.toISOString(),
+        time: newTime
+      });
+      await queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      toast({
+        title: "Appointment Rescheduled",
+        description: `Appointment rescheduled to ${format(newDate, 'MMM dd, yyyy')} at ${newTime}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to reschedule appointment",
+        variant: "destructive"
+      });
+    }
+  };
 
   if (isLoadingDoctors) {
     return (
@@ -232,22 +250,29 @@ export default function AppointmentManagement() {
                             </Button>
                           </div>
                           <div className="grid grid-cols-2 gap-2">
-                            {doctor.schedules.map((schedule) => (
-                              schedule.slots.map((slot) => (
-                                <BookAppointmentDialog
-                                  key={slot.time}
-                                  doctorId={doctor.id}
-                                  date={currentDate.toISOString().split('T')[0]}
-                                  time={slot.time}
-                                onBookAppointment={handleBookAppointment}
-                                doctors={doctors}
-                              >
-                                <Button variant="outline" size="sm" className="w-full">
-                                  {slot.time}
-                                </Button>
-                              </BookAppointmentDialog>
+                            {doctor.schedules.length === 0 ? (
+                              <div className="col-span-2 text-center py-4">
+                                <AlertCircle className="mx-auto h-6 w-6 text-muted-foreground" />
+                                <p className="mt-2 text-sm text-gray-500">No schedule found for this doctor</p>
+                              </div>
+                            ) : (
+                              doctor.schedules.map((schedule) => (
+                                schedule.slots.map((slot) => (
+                                  <BookAppointmentDialog
+                                    key={slot.time}
+                                    doctorId={doctor.id}
+                                    date={currentDate.toISOString().split('T')[0]}
+                                    time={slot.time}
+                                    onBookAppointment={handleBookAppointment}
+                                    doctors={doctors}
+                                  >
+                                    <Button variant="outline" size="sm" className="w-full">
+                                      {slot.time}
+                                    </Button>
+                                  </BookAppointmentDialog>
+                                ))
                               ))
-                            ))}
+                            )}
                           </div>
                         </div>
                       </DialogContent>

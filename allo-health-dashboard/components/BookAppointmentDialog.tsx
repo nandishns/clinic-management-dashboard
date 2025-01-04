@@ -23,8 +23,8 @@ export default function BookAppointmentDialog({ children, doctorId: initialDocto
   const [open, setOpen] = useState(false)
   const [patientName, setPatientName] = useState("")
   const [selectedDoctorId, setSelectedDoctorId] = useState<string>(initialDoctorId?.toString() || "")
-  const [selectedDate, setSelectedDate] = useState<string>(initialDate || "")
-  const [selectedTime, setSelectedTime] = useState<string>(initialTime || "")
+  const [selectedDate, setSelectedDate] = useState<string>(initialDate || new Date().toISOString().split('T')[0])
+  const [selectedTime, setSelectedTime] = useState<string>(initialTime || new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }))
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
 
