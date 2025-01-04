@@ -58,7 +58,7 @@ Allo Health Clinic Management System is a healthcare management solution designe
 ## Codebase Structure & Best Practices
 
 ### Frontend Architecture
-
+```
 allo-health-dashboard/
 ├── app/ # Next.js app router pages
 ├── components/ # Reusable UI components
@@ -66,9 +66,11 @@ allo-health-dashboard/
 ├── hooks/ # Custom React hooks
 ├── services/ # API service layers
 └── utils/ # Utility functions
+```
 
 ### Backend Architecture
 
+```
 allo-health-backend/
 ├── src/ # Main application code
 ├── modules/ # Feature-specific modules
@@ -78,6 +80,7 @@ allo-health-backend/
 ├── middleware/ # Middleware for authentication and error handling
 ├── types/ # TypeScript types and interfaces
 ├── utils/ # Utility functions
+```
 
 ### OOP Principles Used
 
