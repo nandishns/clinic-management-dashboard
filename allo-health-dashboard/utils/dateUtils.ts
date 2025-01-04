@@ -1,7 +1,6 @@
 export const getNextAvailableDisplay = (schedules: Array<{ slots: Array<{ status: string; time: string }> }>) => {
   const now = new Date();
   const currentTime = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-  console.log(schedules);
   const nextSlot = schedules.find(schedule => 
     schedule.slots.some(slot => 
       slot.status.toUpperCase() === "AVAILABLE" && slot.time >= currentTime
