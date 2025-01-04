@@ -77,15 +77,15 @@ export class UserService {
 
     // Create auth record
     const auth = this.authRepository.create({
-      username: registerDto.staffId, // Using staffId as username
+      username: registerDto.staffId, 
       password: registerDto.password,
     });
     await this.authRepository.save(auth);
 
     // Create user record
     const user = this.usersRepository.create({
-      name: staff.name, // Get from staff record
-      email: staff.email, // Get from staff record
+      name: staff.name,
+      email: staff.email,
       role: Role.STAFF,
       created_at: new Date(),
       auth: auth,
@@ -93,7 +93,6 @@ export class UserService {
     });
     const savedUser = await this.usersRepository.save(user);
 
-    // Mark staff as registered
     staff.isRegistered = true;
     await this.staffRepository.save(staff);
 

@@ -24,7 +24,6 @@ export class QueueService {
   async addToQueue(createQueueDto: CreateQueueDto): Promise<Queue> {
     this.logger.log(`Adding new patient to queue: ${createQueueDto.patientName}`);
     
-    // Create patient and queue entry in a single transaction
     const queueEntry = await this.queueRepository.manager.transaction(async transactionalEntityManager => {
       // Check if patient exists by mobile number
       let patient = await transactionalEntityManager.findOne(Patient, {
@@ -42,8 +41,6 @@ export class QueueService {
         });
         await transactionalEntityManager.save(Patient, patient);
       }
-
-      // Get latest queue number by finding the most recent queue entry
       const latestQueue = await transactionalEntityManager
         .createQueryBuilder(Queue, 'queue')
         .orderBy('queue.queueNumber', 'DESC')
